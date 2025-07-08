@@ -64,5 +64,4 @@ public class Counter : MonoBehaviour
             CounterText.text = _counter.ToString();
         }
     }
-
 }
