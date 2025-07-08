@@ -12,6 +12,13 @@ public class Counter : MonoBehaviour
 
     private Coroutine _countingCoroutine;
 
+    private WaitForSeconds _waitHalfSecond;
+
+    private void Awake()
+    {
+        _waitHalfSecond = new WaitForSeconds(0.5f); // Создаем один раз
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -44,9 +51,9 @@ public class Counter : MonoBehaviour
 
     private IEnumerator CountEveryHalfSecond()
     {
-        while (true)
+        while (_isCounting)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return _waitHalfSecond;
             
             _counter++;
             
@@ -56,9 +63,6 @@ public class Counter : MonoBehaviour
 
     private void UpdateCounterDisplay()
     {
-        
-        Debug.Log($"Текущее значение счетчика: {_counter}");
-
         if (CounterText != null)
         {
             CounterText.text = _counter.ToString();
