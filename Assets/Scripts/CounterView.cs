@@ -10,7 +10,7 @@ public class CounterView : MonoBehaviour
     {
         if (_counter != null)
         {
-            _counter.OnCountChanged += UpdateView;
+            _counter.CountChanged += UpdateView;
         }
     }
 
@@ -18,7 +18,7 @@ public class CounterView : MonoBehaviour
     {
         if (_counter != null)
         {
-            _counter.OnCountChanged -= UpdateView;
+            _counter.CountChanged -= UpdateView;
         }
     }
 

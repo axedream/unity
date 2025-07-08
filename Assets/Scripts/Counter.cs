@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
-    public event System.Action<int> OnCountChanged;
-
     private int _counter = 0;
 
     private bool _isCounting = false;
@@ -12,6 +10,8 @@ public class Counter : MonoBehaviour
     private Coroutine _countingCoroutine;
 
     private WaitForSeconds _waitHalfSecond;
+
+    public event System.Action<int> CountChanged;
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class Counter : MonoBehaviour
             
             _counter++;
 
-            OnCountChanged?.Invoke(_counter);
+            CountChanged?.Invoke(_counter);
         }
     }
 }
