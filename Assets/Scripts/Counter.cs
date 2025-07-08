@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
-    [SerializeField] private TMP_Text CounterText;
+    public event System.Action<int> OnCountChanged;
 
     private int _counter = 0;
 
@@ -16,7 +16,7 @@ public class Counter : MonoBehaviour
 
     private void Awake()
     {
-        _waitHalfSecond = new WaitForSeconds(0.5f); // Создаем один раз
+        _waitHalfSecond = new WaitForSeconds(0.5f);
     }
 
     private void Update()
@@ -56,16 +56,8 @@ public class Counter : MonoBehaviour
             yield return _waitHalfSecond;
             
             _counter++;
-            
-            UpdateCounterDisplay();
-        }
-    }
 
-    private void UpdateCounterDisplay()
-    {
-        if (CounterText != null)
-        {
-            CounterText.text = _counter.ToString();
+            OnCountChanged?.Invoke(_counter);
         }
     }
 }
