@@ -1,28 +1,39 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Counter : MonoBehaviour
 {
-    private int _counter = 0;
+    [SerializeField] private InputMouse _inputMouse;
+
+    private int _sum = 0;
 
     private bool _isCounting = false;
 
-    private Coroutine _countingCoroutine;
+    private Coroutine _coroutine;
 
     private WaitForSeconds _waitHalfSecond;
 
-    public event System.Action<int> CountChanged;
+    public event System.Action<int> Changed;
 
     private void Awake()
     {
         _waitHalfSecond = new WaitForSeconds(0.5f);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (_inputMouse != null)
         {
-            ToggleCounting();
+            _inputMouse.ButtonLeftPressed += ToggleCounting;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_inputMouse != null)
+        {
+            _inputMouse.ButtonLeftPressed -= ToggleCounting;
         }
     }
 
@@ -32,31 +43,31 @@ public class Counter : MonoBehaviour
 
         if (_isCounting)
         {
-            if (_countingCoroutine == null)
+            if (_coroutine == null)
             {
-                _countingCoroutine = StartCoroutine(CountEveryHalfSecond());
+                _coroutine = StartCoroutine(ChangeEveryHalfSecond());
             }
         }
         else
         {
-            if (_countingCoroutine != null)
+            if (_coroutine != null)
             {
-                StopCoroutine(_countingCoroutine);
+                StopCoroutine(_coroutine);
 
-                _countingCoroutine = null;
+                _coroutine = null;
             }
         }
     }
 
-    private IEnumerator CountEveryHalfSecond()
+    private IEnumerator ChangeEveryHalfSecond()
     {
         while (_isCounting)
         {
             yield return _waitHalfSecond;
             
-            _counter++;
+            _sum++;
 
-            CountChanged?.Invoke(_counter);
+            Changed?.Invoke(_sum);
         }
     }
 }
