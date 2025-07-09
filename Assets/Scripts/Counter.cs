@@ -7,13 +7,9 @@ public class Counter : MonoBehaviour
     [SerializeField] private InputMouse _inputMouse;
 
     private int _sum = 0;
-
-    private bool _isCounting = false;
-
+    private bool _isCounting = true;
     private Coroutine _coroutine;
-
     private WaitForSeconds _waitHalfSecond;
-
     public event System.Action<int> Changed;
 
     private void Awake()
@@ -25,7 +21,7 @@ public class Counter : MonoBehaviour
     {
         if (_inputMouse != null)
         {
-            _inputMouse.ButtonLeftPressed += ToggleCounting;
+            _inputMouse.ButtonPressed += ToggleCounting;
         }
     }
 
@@ -33,29 +29,21 @@ public class Counter : MonoBehaviour
     {
         if (_inputMouse != null)
         {
-            _inputMouse.ButtonLeftPressed -= ToggleCounting;
+            _inputMouse.ButtonPressed -= ToggleCounting;
         }
     }
 
     private void ToggleCounting()
     {
-        _isCounting = !_isCounting;
-
-        if (_isCounting)
+        if (_coroutine == null)
         {
-            if (_coroutine == null)
-            {
-                _coroutine = StartCoroutine(ChangeEveryHalfSecond());
-            }
+            _coroutine = StartCoroutine(ChangeEveryHalfSecond());
         }
         else
         {
-            if (_coroutine != null)
-            {
-                StopCoroutine(_coroutine);
+            StopCoroutine(_coroutine);
 
-                _coroutine = null;
-            }
+            _coroutine = null;
         }
     }
 
